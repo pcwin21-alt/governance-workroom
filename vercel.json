@@ -1,0 +1,25 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "npm run build:public-demo",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/explore", "destination": "/index.html" },
+    { "source": "/insights", "destination": "/index.html" },
+    { "source": "/how-it-works", "destination": "/index.html" },
+    { "source": "/use-cases", "destination": "/index.html" },
+    { "source": "/governance-and-security", "destination": "/index.html" },
+    { "source": "/about", "destination": "/index.html" },
+    { "source": "/pilot", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/:path*",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}

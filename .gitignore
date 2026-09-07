@@ -1,0 +1,7 @@
+data/governance.json
+data/*.backup.json
+.env
+node_modules/
+dist/
+
+.vercel
