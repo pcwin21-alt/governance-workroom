@@ -802,3 +802,12 @@
 - Decision: `proposal-deadline-list`와 `feedback-overview`만 조밀한 목록 규칙으로 보정했다. 패널 자체의 외곽 여백은 14px, 각 정보 행은 최소 54px·상하 8px으로 정해 텍스트 두 줄과 행동 열을 유지하되 비어 있는 세로 공간을 줄인다.
 - Harness update: 실행·품질 3층의 `Eval.md`와 `TEST_CASES.md`에 실제 2–4개 행 렌더, 행 내부 여백과 섹션 호흡의 분리, 단일 항목 착시를 실패 사례로 추가했다. Core/Project 층에는 충돌하는 규칙이 없어 변경하지 않았다.
 - Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`, `git diff --check`를 통과했다. 공개 체험판 데스크톱 렌더에서 임박한 정책 제안 일정 2건과 제안별 피드백 2건을 함께 확인해, 행 내부는 조밀하고 두 패널 간의 구분 여백은 유지되는 것을 시각 검수했다.
+
+---
+
+## 정책 제안서 전용 작성 화면 — 2026-09-08
+
+- Task contract: 정책 제안의 하위 메뉴에 `정책 제안서 작성`을 추가하고, 새 제안을 모달이 아닌 전체 화면에서 작성하도록 바꾼다.
+- Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 기존 제안 API·권한·자동 기록 파일 구조는 재사용하며 외부 AI 연동·서버 스키마 변경은 제외했다.
+- Decision: 하위 메뉴는 `제안 현황 / 제안서 목록 / 정책 제안서 작성`으로 고정했다. 작성 화면은 제목·분야·마감·연결 이슈와 5개 본문 필드를 한 페이지에서 작성하고, 초안 저장 후 기존 상세 화면의 공동 작성·검토·제출·회신 흐름으로 이동한다.
+- Eval plan: JavaScript 구문, 자동 테스트, 공개 데모 빌드, 좌측 소메뉴 진입과 전체 페이지 작성 폼 렌더를 확인한다.
