@@ -698,4 +698,4 @@
 - Task contract: 기본 회의 화면은 캘린더가 전체 폭을 사용하고, 일정 클릭 시에만 우측 요약 패널을 표시한다. 패널은 자연스럽게 진입하며, 일정 선택을 해제하면 캘린더 폭을 복원한다.
 - Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, KRDS Web Typography and Information Hierarchy, Eval. 외부 조사·서비스 연동·문체 작업은 제외했다.
 - Decision: 기본 선택값을 제거하고, 선택된 일정이 있을 때만 `.meeting-inspector`를 렌더한다. 날짜 클릭 또는 닫기 버튼은 선택을 해제한다. 데스크톱에서는 캘린더 압축과 우측 패널 진입 애니메이션을 적용하고, 1000px 이하에서는 세로 배치를 유지한다.
-- Acceptance evidence: 자동 검사와 공개 체험판 브라우저에서 기본 1열 캘린더, 일정 클릭 뒤 2열 요약, 닫기 뒤 1열 복원을 확인한다.
+- Eval evidence: `node --check public/app.js`, `npm test` 36건, `npm run build:public-demo` 통과. 공개 체험판의 데스크톱 브라우저에서 일정 선택 뒤 `.calendar-layout.has-inspector`와 우측 요약 패널(캘린더 폭 652px)을, 닫기 뒤 패널 제거와 전체 폭 캘린더(1024px)를 확인했다.
