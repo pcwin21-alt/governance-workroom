@@ -792,3 +792,13 @@
 - Decision: 우선순위는 `참석 응답 → 담당 후속 과제 → 미해결 검토 의견 → 기관 회신 대기`로 고정했다. 화면에는 참석 응답 대기, 후속 과제, 정책 제안, 검토·회신 대기 지표와 내 일정·내 기록·내 정책 제안 단계·내 최근 활동만 표시한다. 기록은 작성자뿐 아니라 해당 회의·정책 제안 참여자에게 연결된 기록 파일도 포함한다.
 - Boundary: 이 화면은 공동 데이터의 개인별 보기일 뿐, 새 데이터·새 권한·새 아카이브 사본을 만들지 않는다. 실시간 협업이나 실제 알림 처리는 구현 범위가 아니다.
 - Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`, `git diff --check`를 통과했다. 공개 체험판에서 `내 활동`의 우선 행동·지표·내 일정·내 기록·제안 단계·개인 변경 이력을 확인했고, 연결된 기록 파일을 열어 버전 이력과 DOCX/PDF 내보내기 제어가 표시되는 것을 확인했다. 작은 화면은 720px 이하 단일 열·전체 폭 행동 버튼 CSS로 확인했으며, 기기별 실물 검수는 후속 배포 점검 항목이다.
+
+---
+
+## 목록 행 간격 점검 규칙 — 2026-09-08
+
+- Task contract: 정책 제안 현황의 일정·피드백 목록에서 과도한 행 여백을 줄이고, 이후 웹 UI 제작 시 실제 목록 데이터로 행 높이와 섹션 여백을 분리 검수하는 규칙을 추가한다.
+- Active: Root AGENTS, Harness & Skill Inventory Router, Harness Update Router, `codex-delivery-loop`, Eval. 문체·외부 조사·서버 데이터 변경은 제외했다.
+- Decision: `proposal-deadline-list`와 `feedback-overview`만 조밀한 목록 규칙으로 보정했다. 패널 자체의 외곽 여백은 14px, 각 정보 행은 최소 54px·상하 8px으로 정해 텍스트 두 줄과 행동 열을 유지하되 비어 있는 세로 공간을 줄인다.
+- Harness update: 실행·품질 3층의 `Eval.md`와 `TEST_CASES.md`에 실제 2–4개 행 렌더, 행 내부 여백과 섹션 호흡의 분리, 단일 항목 착시를 실패 사례로 추가했다. Core/Project 층에는 충돌하는 규칙이 없어 변경하지 않았다.
+- Eval plan: CSS/JavaScript 검사, 자동 테스트·공개 데모 빌드, 데스크톱 공개 체험의 정책 제안 목록 렌더를 확인한다.
