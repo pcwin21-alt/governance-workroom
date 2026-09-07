@@ -126,7 +126,7 @@ function proposalPipelineChart() {
   return `<article class="panel operating-chart pipeline-chart"><div class="panel-head"><div><h3>정책제안 파이프라인</h3><p>현재 단계의 병목을 확인합니다.</p></div><button class="text-button" data-tab="proposals">제안 목록 보기</button></div><div class="pipeline-bar" role="img" aria-label="정책제안 상태별 구성">${counts.filter((item) => item.value).map((item) => `<span class="${item.id}" style="width:${(item.value / total) * 100}%"><i>${item.value}</i></span>`).join('') || '<span class="empty-stage" style="width:100%"></span>'}</div><div class="pipeline-labels">${counts.map((item) => `<span class="${item.id}"><i></i>${esc(item.label)} <b>${item.value}</b></span>`).join('')}</div><small class="chart-note">총 ${total === 1 && !counts.some((item) => item.value) ? 0 : total}건 · 개인별 성과가 아닌 제안 상태 기준</small></article>`;
 }
 function upcomingMeetingSummaries(meetings, base) {
-  const monthStart = new Date(base.getFullYear(), base.getMonth(), 1); const nextMonthStart = new Date(base.getFullYear(), base.getMonth() + 1, 1); const afterNextMonthStart = new Date(base.getFullYear(), base.getMonth() + 2, 1);
+  const monthStart = new Date(base.getFullYear(), base.getMonth(), 1); const nextMonthStart = new Date(base.getFullYear(), base.getMonth() + 1, 1); const afterNextMonthStart = new Date(base.getFullYear(), base.getMonth() + 2, 1); const today = new Date(); today.setHours(0, 0, 0, 0);
   const groups = [
     { label: '이번 달 예정 회의', month: monthStart, end: nextMonthStart },
     { label: '다음 달 예정 회의', month: nextMonthStart, end: afterNextMonthStart },
@@ -137,7 +137,7 @@ function upcomingMeetingSummaries(meetings, base) {
     return { ...stats, total: targetIds.length };
   };
   const cards = groups.map(({ label, month, end }) => {
-    const scheduled = meetings.filter((meeting) => { const startsAt = new Date(meeting.startsAt); return meeting.status !== 'cancelled' && startsAt >= month && startsAt < end; }).sort((left, right) => String(left.startsAt).localeCompare(String(right.startsAt)));
+    const scheduled = meetings.filter((meeting) => { const startsAt = new Date(meeting.startsAt); return meeting.status !== 'cancelled' && startsAt >= today && startsAt >= month && startsAt < end; }).sort((left, right) => String(left.startsAt).localeCompare(String(right.startsAt)));
     return `<section class="meeting-month-card"><header><div><h2>${label}</h2><p>${month.getFullYear()}년 ${month.getMonth() + 1}월</p></div><span>${scheduled.length}건</span></header><div class="meeting-month-list">${scheduled.map((meeting) => { const stats = responseStats(meeting); return `<button type="button" class="meeting-month-row" data-calendar-meeting="${meeting.id}"><div class="meeting-month-main"><span class="tag">${esc(meeting.type || '회의')}</span><b>${esc(meeting.title)}</b><small>${fmt(meeting.startsAt)} · 대상 ${stats.total}명</small></div><div class="meeting-rsvp-stats" role="img" aria-label="참석 회신 ${stats.attending}명, 불참 회신 ${stats.absent}명, 미회신 ${stats.undecided}명"><span class="attending"><i></i>참석 ${stats.attending}</span><span class="absent"><i></i>불참 ${stats.absent}</span><span class="undecided"><i></i>미회신 ${stats.undecided}</span></div></button>`; }).join('') || '<p class="empty">예정된 회의가 없습니다.</p>'}</div></section>`;
   }).join('');
   return `<section class="meeting-month-summaries" aria-label="예정 회의와 참석 회신 현황">${cards}</section>`;
