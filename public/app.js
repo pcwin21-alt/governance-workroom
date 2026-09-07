@@ -921,7 +921,11 @@ modal('참여기구 기본 정보', `<label>기구명<input name="displayName" v
 
 window.addEventListener('popstate', () => { if (isPublicDemo && state.token === '__public_demo__' && new URLSearchParams(window.location.search).get('demo') !== 'dashboard') { state.token = null; state.data = null; } render(); });
 (async () => {
-  if (isPublicDemo) { publicView(); return; }
+  if (isPublicDemo) {
+    if (state.token === '__public_demo__') { render(); return; }
+    publicView();
+    return;
+  }
   try { state.authProviders = await api('/api/auth/providers'); } catch { /* Public pages remain available when the provider check fails. */ }
   if (window.location.pathname.startsWith('/admin')) state.tab = 'operations';
   const authQuery = new URLSearchParams(window.location.search);
