@@ -744,3 +744,12 @@
 - Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 외부 조사·서비스 연동·문체 작업은 제외했다.
 - Decision: 회의 캘린더·회의 기록, 정책 제안 현황·목록, 자료실 기록 목록의 개인 범위 필터와 상태를 제거했다. 기존 상태·구분 필터와 열람 권한 표시는 유지한다.
 - Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`를 통과했다. 공개 체험판의 정책 제안 화면에서 개인 범위 토글 없이 상태 필터와 제안 현황만 남은 것을 확인했다.
+
+---
+
+## 예정 회의·참석 회신 요약 — 2026-09-08
+
+- Task contract: 회의·일정 화면에서 기존 회의별 실제 출석 막대를 제거하고, 달력 위에 이번 달·다음 달 예정 회의를 각각 표시한다. 각 회의는 유형, 참석 대상 인원, 참석·불참·미회신 수를 색상과 텍스트로 함께 보여 준다.
+- Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 외부 조사·서비스 연동·문체 작업은 제외했다.
+- Decision: 미래 회의의 상태를 오해하지 않도록 실제 출석이 아닌 RSVP 응답으로 집계한다. 참석 대상은 회의의 `participantIds`를 정본으로 하며, 참석/불참 이외의 값과 누락 값은 미회신으로 표시한다.
+- Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`를 통과했다. 빌드된 공개 체험 데이터에 이번 달 4명 대상 분과회의와 다음 달 6명 대상 정기회의가 포함된 것을 확인했다.
