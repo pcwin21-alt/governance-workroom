@@ -810,4 +810,4 @@
 - Task contract: 정책 제안의 하위 메뉴에 `정책 제안서 작성`을 추가하고, 새 제안을 모달이 아닌 전체 화면에서 작성하도록 바꾼다.
 - Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 기존 제안 API·권한·자동 기록 파일 구조는 재사용하며 외부 AI 연동·서버 스키마 변경은 제외했다.
 - Decision: 하위 메뉴는 `제안 현황 / 제안서 목록 / 정책 제안서 작성`으로 고정했다. 작성 화면은 제목·분야·마감·연결 이슈와 5개 본문 필드를 한 페이지에서 작성하고, 초안 저장 후 기존 상세 화면의 공동 작성·검토·제출·회신 흐름으로 이동한다.
-- Eval plan: JavaScript 구문, 자동 테스트, 공개 데모 빌드, 좌측 소메뉴 진입과 전체 페이지 작성 폼 렌더를 확인한다.
+- Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`, `git diff --check`를 통과했다. 공개 체험판에서 왼쪽 `정책 제안` 메뉴의 세 번째 소메뉴 `정책 제안서 작성`을 선택해 제목·분야·마감일·연결 이슈와 5개 핵심 작성 항목이 있는 전체 작성 화면이 열리는 것을 확인했다. 정적 CSS·JS import에는 배포 캐시 갱신용 버전을 부여했다.
