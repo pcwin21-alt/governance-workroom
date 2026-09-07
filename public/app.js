@@ -1,6 +1,19 @@
 const app = document.querySelector('#app');
-const isPublicDemo = Boolean(window.WORKROOM_CONFIG?.publicDemo);
-const publicDashboardDemo = window.WORKROOM_CONFIG?.dashboardDemo || null;
+let runtimeConfig = window.WORKROOM_CONFIG || null;
+
+// Some privacy extensions prevent a standalone configuration script from
+// executing. The JSON fallback keeps the public demo entry point reliable.
+if (!runtimeConfig) {
+  try {
+    const response = await fetch('/runtime-config.json', { cache: 'no-store' });
+    if (response.ok) runtimeConfig = await response.json();
+  } catch {
+    // The authenticated application continues without public-demo settings.
+  }
+}
+
+const isPublicDemo = Boolean(runtimeConfig?.publicDemo);
+const publicDashboardDemo = runtimeConfig?.dashboardDemo || null;
 const opensPublicDashboard = isPublicDemo && Boolean(publicDashboardDemo) && new URLSearchParams(window.location.search).get('demo') === 'dashboard';
 const state = { token: opensPublicDashboard ? '__public_demo__' : (isPublicDemo ? null : '__cookie_session__'), data: opensPublicDashboard ? structuredClone(publicDashboardDemo) : null, authProviders: { google: false, kakao: false }, tab: opensPublicDashboard ? 'organization_home' : 'home', homeSection: 'overview', meetingSection: 'calendar', proposalSection: 'overview', organizationSection: 'overview', archiveSection: 'dashboard', archiveCategory: 'all', meetingScope: 'all', proposalScope: 'all', archiveScope: 'all', selectedProposalId: null, proposalFilter: 'all', workspaceTenantId: null, adminSection: 'command', memberSection: 'organization', calendarMode: 'month', calendarDate: new Date().toISOString().slice(0, 10), selectedMeetingId: null, selectedImportId: null, archiveFolderId: 'all', archiveView: 'list', selectedOrgNodeId: null, orgPlacementMemberId: null, notificationsOpen: false, message: '', error: '', publicMessage: '', notificationPermissionAsked: false, deadlineReminderShown: false, knownNotificationIds: new Set(), viewMotion: '', viewMotionTimer: null };
 const roleCanManage = (permission = 'manage') => state.data?.me.role === 'platform_admin' || Boolean(state.data?.me.tenantPermissions?.[state.data?.me.role]?.[permission]);

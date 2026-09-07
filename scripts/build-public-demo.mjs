@@ -39,7 +39,9 @@ const dashboardDemo = {
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
 await cp(source, output, { recursive: true });
-await writeFile(path.join(output, 'runtime-config.js'), `window.WORKROOM_CONFIG = ${JSON.stringify({ publicDemo: true, dashboardDemo })};\n`, 'utf8');
+const publicConfig = { publicDemo: true, dashboardDemo };
+await writeFile(path.join(output, 'runtime-config.js'), `window.WORKROOM_CONFIG = ${JSON.stringify(publicConfig)};\n`, 'utf8');
+await writeFile(path.join(output, 'runtime-config.json'), JSON.stringify(publicConfig), 'utf8');
 await writeFile(path.join(output, 'vercel.json'), JSON.stringify({
   rewrites: [
     { source: '/explore', destination: '/index.html' },
