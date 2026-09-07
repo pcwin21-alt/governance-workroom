@@ -718,3 +718,12 @@
 - Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 외부 조사·서비스 연동·문체 작업은 제외했다. 프로젝트 루트에 `Project.md`는 없어 최소 계약으로 대체했다.
 - Decision: 계정 화면에서 개인정보 확인·수정, 사진, 비밀번호, 데이터 권리, 회원 탈퇴 요청을 제공한다. `탈퇴` 확인 문구를 입력해야 요청이 생성되며, 체험판에서 실제 계정 삭제는 하지 않는다.
 - Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`를 통과했다. 공개 체험판에서 `나의 활동` 대메뉴, 사람 아이콘의 계정 관리 진입, 개인정보 확인·수정·회원 탈퇴 요청 항목을 확인했다.
+
+---
+
+## 활동 기록 속성 모델 — 2026-09-07
+
+- Task contract: 노션의 속성 방식을 참고하되, 청년참여기구 활동 기록의 검색·책임·기한·근거·아카이빙·전달에 필요한 최소 속성 모델과 파일화 구조를 설계한다.
+- Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 외부 조사·서비스 연동·문체 작업은 제외했다.
+- Decision: 원본 기록 → 버전형 기록 파일 → 고정 아카이브 파일 → DOCX/PDF/통합 자료 흐름을 정했다. 자동·시스템 속성은 보존하고, 운영자가 추가한 속성만 비표시·삭제 가능한 구조로 둔다.
+- Output: `RECORD_PROPERTY_MODEL.md`에 속성 목록, 권한, 화면 규칙, 파일화 규칙, 구현 순서와 수락 기준을 기록했다. 아직 실행 코드는 추가하지 않은 설계 단계다.
