@@ -820,4 +820,4 @@
 - Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 외부 연동·서버 데이터 삭제·권한 정책 변경은 제외했다.
 - Decision: 자료실의 `전체 기록 / 파일 관리 / 역대 기록` 소메뉴를 하나의 `자료실` 화면으로 합쳤다. 정책 제안서 작성의 이슈 연결과 AI 작성 도움을 제거하고, 제안 현황도 진행 상태·마감·미해결 피드백만 남겼다. 아카이브 보관 후보에서도 이슈·공지를 제외했다. 회의·참석·결정, 정책 제안·피드백·기관 회신, 기록 보관·DOCX/PDF 내보내기, 내 활동·계정은 유지한다.
 - Boundary: 기존 이슈·공지와 AI 보조 API 데이터·엔드포인트는 이전 기록 호환을 위해 서버에 남긴다. 더 이상 워크룸의 주 화면·작성 흐름·보관 후보에서는 표출하지 않는다.
-- Eval plan: JavaScript 구문, 자동 테스트, 공개 데모 빌드, 자료실의 단일 진입과 정책 제안서 작성 화면의 축소된 필드를 확인한다.
+- Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`, `git diff --check`를 통과했다. 공개 체험판에서 상위 메뉴가 `홈 / 내 활동 / 회의 / 정책 제안 / 자료실`로만 보이고 자료실 아래에는 별도 소메뉴가 없는 것을 확인했다. 공개 자산의 캐시 버전도 갱신했다.
