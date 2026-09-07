@@ -762,3 +762,13 @@
 - Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 외부 서비스 연동·서버 데이터 삭제·문체 작업은 제외했다.
 - Decision: 공개 체험 초기 탭과 진입 함수 모두 `홈`으로 고정했다. 기관 수신함과 기존 기관용 홈은 UI 화면 목록에서 제외했으며, 정책 전달·회신의 서버 데이터와 API는 후속 재개를 위해 삭제하지 않았다.
 - Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`를 통과했다. 공개 체험판의 `?demo=dashboard` 첫 화면에서 `오늘 처리할 일`, 위원회 일정, 진행 중 정책제안이 표시되고 기관 수신함 화면이 나타나지 않는 것을 확인했다.
+
+---
+
+## 국무조정실 언어 레퍼런스 분석 — 2026-09-08
+
+- Task contract: 국무조정실·국무총리비서실 공식 누리집의 현행 메뉴·보도자료·게시판 UI 언어를 수집하고, 워크룸의 공동 작업·기록·대외 전달 언어로 재분류한다.
+- Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Website Product Planning Harness, Eval, Source. 화면을 수정하지 않는 언어·정보구조 분석이므로 구현·브라우저 QA는 제외했다.
+- Decision: 공식 포털의 `상위 목적 묶음 → 하위 객체/행동 → 개요·절차·현황·자료` 패턴과 제목의 `주체 + 행동 + 대상` 패턴은 채택한다. 반면 포털의 6개 대분류와 내부 화면의 `전체 / 내 관련` 범위 토글은 채택하지 않는다. 워크룸 정본은 `홈 / 내 활동 / 회의 / 정책 제안 / 자료실 / 내 계정`이며, 대외 공개 승인 전 내부 기록을 `보도자료`라고 부르지 않는다.
+- Output: `OPM_REFERENCE_LANGUAGE_ANALYSIS.md`에 글로벌 메뉴 전체, 현재 보도자료 목록 첫 페이지, UI 용어, 채택·제외 근거, 워크룸 용어 사전과 아카이빙 필드를 기록했다.
+- Source boundary: 공식 URL의 현재 공개 화면만 근거로 삼았다. 과거 보도자료 전체를 전수 수집하거나, 공식 사이트의 구조가 워크룸에 적합하다고 단정하지 않는다.
