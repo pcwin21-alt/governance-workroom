@@ -15,7 +15,7 @@ if (!runtimeConfig) {
 const isPublicDemo = Boolean(runtimeConfig?.publicDemo);
 const publicDashboardDemo = runtimeConfig?.dashboardDemo || null;
 const opensPublicDashboard = isPublicDemo && Boolean(publicDashboardDemo) && new URLSearchParams(window.location.search).get('demo') === 'dashboard';
-const state = { token: opensPublicDashboard ? '__public_demo__' : (isPublicDemo ? null : '__cookie_session__'), data: opensPublicDashboard ? structuredClone(publicDashboardDemo) : null, authProviders: { google: false, kakao: false }, tab: opensPublicDashboard ? 'organization_home' : 'home', homeSection: 'overview', meetingSection: 'calendar', proposalSection: 'overview', organizationSection: 'overview', archiveSection: 'dashboard', archiveCategory: 'all', selectedProposalId: null, proposalFilter: 'all', workspaceTenantId: null, adminSection: 'command', memberSection: 'organization', calendarMode: 'month', calendarDate: new Date().toISOString().slice(0, 10), selectedMeetingId: null, selectedImportId: null, archiveFolderId: 'all', archiveView: 'list', selectedOrgNodeId: null, orgPlacementMemberId: null, notificationsOpen: false, message: '', error: '', publicMessage: '', notificationPermissionAsked: false, deadlineReminderShown: false, knownNotificationIds: new Set(), viewMotion: '', viewMotionTimer: null };
+const state = { token: opensPublicDashboard ? '__public_demo__' : (isPublicDemo ? null : '__cookie_session__'), data: opensPublicDashboard ? structuredClone(publicDashboardDemo) : null, authProviders: { google: false, kakao: false }, tab: 'home', homeSection: 'overview', meetingSection: 'calendar', proposalSection: 'overview', organizationSection: 'overview', archiveSection: 'dashboard', archiveCategory: 'all', selectedProposalId: null, proposalFilter: 'all', workspaceTenantId: null, adminSection: 'command', memberSection: 'organization', calendarMode: 'month', calendarDate: new Date().toISOString().slice(0, 10), selectedMeetingId: null, selectedImportId: null, archiveFolderId: 'all', archiveView: 'list', selectedOrgNodeId: null, orgPlacementMemberId: null, notificationsOpen: false, message: '', error: '', publicMessage: '', notificationPermissionAsked: false, deadlineReminderShown: false, knownNotificationIds: new Set(), viewMotion: '', viewMotionTimer: null };
 const roleCanManage = (permission = 'manage') => state.data?.me.role === 'platform_admin' || Boolean(state.data?.me.tenantPermissions?.[state.data?.me.role]?.[permission]);
 const fmt = (value) => value ? new Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium', timeStyle: value.includes?.('T') ? 'short' : undefined }).format(new Date(value)) : '기록 없음';
 const esc = (value = '') => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[char]);
@@ -81,8 +81,8 @@ function onboardingGuide() {
   const items = guides[me.role] || guides.member;
   return `<section class="onboarding-guide" role="dialog" aria-labelledby="onboarding-title"><div><span class="eyebrow">첫 사용 안내 · ${esc(state.data.roles[me.role] || '구성원')}</span><h2 id="onboarding-title">첫 화면에서 이 순서로 확인하세요</h2><ol>${items.map((item) => `<li>${esc(item)}</li>`).join('')}</ol></div><button class="primary" data-onboarding-close>확인했습니다</button></section>`;
 }
-const navIcons = Object.freeze({ organization_home: '▰', home: '⌂', my_activity: '◷', meetings: '□', members: '◎', directory: '▦', proposals: '✎', inbox: '↥', issues: '⌁', archive: '▤', handover: '↺', organization_data: '▣', operations: '⚙', settings: '◉' });
-const tabLabels = Object.freeze({ organization_home: '위원회 홈', home: '홈', my_activity: '내 활동', meetings: '회의', members: '구성원·권한', directory: '전체 멤버 명단', proposals: '정책 제안', inbox: '검토·회신', issues: '이슈·공지', archive: '자료실', handover: '활동 리포트·인계', organization_data: '위원회 기본 정보', operations: '운영사 콘솔', settings: '내 계정' });
+const navIcons = Object.freeze({ home: '⌂', my_activity: '◷', meetings: '□', members: '◎', directory: '▦', proposals: '✎', issues: '⌁', archive: '▤', handover: '↺', organization_data: '▣', operations: '⚙', settings: '◉' });
+const tabLabels = Object.freeze({ home: '홈', my_activity: '내 활동', meetings: '회의', members: '구성원·권한', directory: '전체 멤버 명단', proposals: '정책 제안', issues: '이슈·공지', archive: '자료실', handover: '활동 리포트·인계', organization_data: '위원회 기본 정보', operations: '운영사 콘솔', settings: '내 계정' });
 const primarySubmenus = Object.freeze({
   meetings: { current: () => state.meetingSection, attribute: 'meeting-section', items: [['calendar', '일정·참석'], ['records', '회의 기록']] },
   proposals: { current: () => state.proposalSection, attribute: 'proposal-section', items: [['overview', '제안 현황'], ['documents', '제안서 목록']] },
@@ -181,7 +181,7 @@ function beginViewMotion(scope = 'workspace') {
   state.viewMotionTimer = window.setTimeout(() => { state.viewMotion = ''; }, 260);
 }
 function goPublic(path) { window.history.pushState({}, '', path); state.publicMessage = ''; beginViewMotion('public'); render(); }
-function openPublicDashboard() { if (!publicDashboardDemo) return goPublic('/explore'); window.history.pushState({}, '', '/?demo=dashboard'); state.token = '__public_demo__'; state.data = structuredClone(publicDashboardDemo); state.tab = 'organization_home'; state.notificationsOpen = false; beginViewMotion(); render(); }
+function openPublicDashboard() { if (!publicDashboardDemo) return goPublic('/explore'); window.history.pushState({}, '', '/?demo=dashboard'); state.token = '__public_demo__'; state.data = structuredClone(publicDashboardDemo); state.tab = 'home'; state.notificationsOpen = false; beginViewMotion(); render(); }
 function goEntry(entry, replace = false) { if (isPublicDemo) return openPublicDashboard(); window.history[replace ? 'replaceState' : 'pushState']({}, '', `/login?entry=${encodeURIComponent(entry)}`); beginViewMotion('public'); render(); }
 function publicNav(path, label) { return `<button class="public-nav-item ${publicPage() === publicRoutes[path] ? 'active' : ''}" data-public-route="${path}">${label}</button>`; }
 function publicShell(content) {
@@ -604,7 +604,7 @@ function recentWorkspaceActivity() {
   const logs = (state.data.auditLogs || []).slice(0, 6);
   return `<section class="panel workspace-activity"><div class="panel-head"><div><h3>최근 변경 이력</h3><p>누가 무엇을 바꿨는지 확인합니다.</p></div></div><div class="workspace-activity-list">${logs.map((log) => `<div class="workspace-activity-row"><span class="activity-mark" aria-hidden="true"></span><div><b>${esc(labels[log.action] || log.action)}</b><small>${esc(user(log.actorId).name)} · ${fmt(log.at)}</small></div><code>${esc(log.resource || '')}</code></div>`).join('') || '<p class="empty">아직 남은 변경 이력이 없습니다.</p>'}</div></section>`;
 }
-function view() { const content = ({ organization_home: organizationHome, home, my_activity: myActivity, meetings, members, directory, proposals, inbox: institutionInbox, issues, archive, handover, operations, organization_data: organizationData, settings: personalSettingsCompact })[state.tab](); return state.tab === 'organization_home' ? `${content}${recentWorkspaceActivity()}` : content; }
+function view() { const screens = { home, my_activity: myActivity, meetings, members, directory, proposals, issues, archive, handover, operations, organization_data: organizationData, settings: personalSettingsCompact }; return (screens[state.tab] || home)(); }
 function refineSidebarBrand() {
   const sidebar = app.querySelector('.sidebar');
   const workspace = sidebar?.querySelector('.workspace-identity');

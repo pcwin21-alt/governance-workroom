@@ -753,3 +753,11 @@
 - Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 외부 조사·서비스 연동·문체 작업은 제외했다.
 - Decision: 미래 회의의 상태를 오해하지 않도록 실제 출석이 아닌 RSVP 응답으로 집계한다. 참석 대상은 회의의 `participantIds`를 정본으로 하며, 참석/불참 이외의 값과 누락 값은 미회신으로 표시한다. 지난 날짜의 회의는 예정 회의 카드에서 제외한다.
 - Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`를 통과했다. 빌드된 공개 체험 데이터에 이번 달 4명 대상 분과회의와 다음 달 6명 대상 정기회의가 포함된 것을 확인했다.
+
+---
+
+## 기관 담당자 화면 보류 — 2026-09-08
+
+- Task contract: 공개 체험판의 `대시보드 열기`는 기관 담당자·검토 수신함이 아니라 위원회 운영 홈으로 진입하고, 기관 담당자 화면은 UI 라우팅에서 표출하지 않는다.
+- Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 외부 서비스 연동·서버 데이터 삭제·문체 작업은 제외했다.
+- Decision: 공개 체험 초기 탭과 진입 함수 모두 `홈`으로 고정했다. 기관 수신함과 기존 기관용 홈은 UI 화면 목록에서 제외했으며, 정책 전달·회신의 서버 데이터와 API는 후속 재개를 위해 삭제하지 않았다.
