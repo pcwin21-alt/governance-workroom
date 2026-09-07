@@ -727,3 +727,11 @@
 - Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 외부 조사·서비스 연동·문체 작업은 제외했다.
 - Decision: 원본 기록 → 버전형 기록 파일 → 고정 아카이브 파일 → DOCX/PDF/통합 자료 흐름을 정했다. 자동·시스템 속성은 보존하고, 운영자가 추가한 속성만 비표시·삭제 가능한 구조로 둔다.
 - Output: `RECORD_PROPERTY_MODEL.md`에 속성 목록, 권한, 화면 규칙, 파일화 규칙, 구현 순서와 수락 기준을 기록했다. 아직 실행 코드는 추가하지 않은 설계 단계다.
+
+---
+
+## 메뉴 용어 정리 — 2026-09-07
+
+- Task contract: 좌측 대메뉴와 계정 아이콘을 이용자에게 익숙한 용어로 바꾸되, 탭 식별자와 기능 경로는 유지한다.
+- Decision: `오늘→홈`, `나의 활동→내 활동`, `회의·결정→회의`, `정책제안→정책 제안`, `기록→자료실`, `계정 관리→내 계정`으로 정리했다. 자료실 하위 메뉴도 `전체 기록 / 파일 관리 / 역대 기록`으로 맞췄다.
+- Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`를 통과했다.
