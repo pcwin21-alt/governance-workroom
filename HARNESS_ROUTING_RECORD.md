@@ -801,4 +801,4 @@
 - Active: Root AGENTS, Harness & Skill Inventory Router, Harness Update Router, `codex-delivery-loop`, Eval. 문체·외부 조사·서버 데이터 변경은 제외했다.
 - Decision: `proposal-deadline-list`와 `feedback-overview`만 조밀한 목록 규칙으로 보정했다. 패널 자체의 외곽 여백은 14px, 각 정보 행은 최소 54px·상하 8px으로 정해 텍스트 두 줄과 행동 열을 유지하되 비어 있는 세로 공간을 줄인다.
 - Harness update: 실행·품질 3층의 `Eval.md`와 `TEST_CASES.md`에 실제 2–4개 행 렌더, 행 내부 여백과 섹션 호흡의 분리, 단일 항목 착시를 실패 사례로 추가했다. Core/Project 층에는 충돌하는 규칙이 없어 변경하지 않았다.
-- Eval plan: CSS/JavaScript 검사, 자동 테스트·공개 데모 빌드, 데스크톱 공개 체험의 정책 제안 목록 렌더를 확인한다.
+- Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`, `git diff --check`를 통과했다. 공개 체험판 데스크톱 렌더에서 임박한 정책 제안 일정 2건과 제안별 피드백 2건을 함께 확인해, 행 내부는 조밀하고 두 패널 간의 구분 여백은 유지되는 것을 시각 검수했다.
