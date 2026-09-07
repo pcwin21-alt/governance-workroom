@@ -709,3 +709,12 @@
 - Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, KRDS Web Typography and Information Hierarchy, Eval. 외부 조사·서비스 연동·문체 작업은 제외했다.
 - Decision: 공통 상단 안내문을 제거하고, 회의 화면의 캘린더 아래 중복 일정 목록을 제거했다. 아카이브는 소메뉴와 같은 제목·구분 요약 카드를 없애고 단일 구분 필터와 기록 목록만 남겼다. 역대 기록도 소메뉴와 중복된 제목을 제거했다.
 - Eval evidence: `node --check public/app.js`, `npm test`, 공개 체험판 주요 메뉴 렌더를 확인한다.
+
+---
+
+## 계정 관리와 나의 활동 분리 — 2026-09-07
+
+- Task contract: 하단 사람 아이콘은 개인 정보·계정 관리로 연결하고, 기존 개인 활동 요약은 좌측 대메뉴 `나의 활동`으로 분리한다. 탈퇴는 즉시 삭제가 아닌 명시적 요청 흐름으로 남긴다.
+- Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 외부 조사·서비스 연동·문체 작업은 제외했다. 프로젝트 루트에 `Project.md`는 없어 최소 계약으로 대체했다.
+- Decision: 계정 화면에서 개인정보 확인·수정, 사진, 비밀번호, 데이터 권리, 회원 탈퇴 요청을 제공한다. `탈퇴` 확인 문구를 입력해야 요청이 생성되며, 체험판에서 실제 계정 삭제는 하지 않는다.
+- Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`를 통과했다. 공개 체험판 메뉴 및 계정 화면의 브라우저 검수는 자동 배포 뒤 수행한다.
