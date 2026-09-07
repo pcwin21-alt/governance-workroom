@@ -717,4 +717,4 @@
 - Task contract: 하단 사람 아이콘은 개인 정보·계정 관리로 연결하고, 기존 개인 활동 요약은 좌측 대메뉴 `나의 활동`으로 분리한다. 탈퇴는 즉시 삭제가 아닌 명시적 요청 흐름으로 남긴다.
 - Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 외부 조사·서비스 연동·문체 작업은 제외했다. 프로젝트 루트에 `Project.md`는 없어 최소 계약으로 대체했다.
 - Decision: 계정 화면에서 개인정보 확인·수정, 사진, 비밀번호, 데이터 권리, 회원 탈퇴 요청을 제공한다. `탈퇴` 확인 문구를 입력해야 요청이 생성되며, 체험판에서 실제 계정 삭제는 하지 않는다.
-- Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`를 통과했다. 공개 체험판 메뉴 및 계정 화면의 브라우저 검수는 자동 배포 뒤 수행한다.
+- Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`를 통과했다. 공개 체험판에서 `나의 활동` 대메뉴, 사람 아이콘의 계정 관리 진입, 개인정보 확인·수정·회원 탈퇴 요청 항목을 확인했다.
