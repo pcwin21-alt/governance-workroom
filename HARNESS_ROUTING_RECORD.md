@@ -681,3 +681,12 @@
 - Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Project Execution, Eval. 외부 조사·서비스 연동·콘텐츠 문체는 제외했다.
 - Decision: `public/additional.css`의 마지막 KRDS 전역 타이포그래피 레이어를 제거했다. 기존 화면별 제목·본문·메타·제어 요소 크기 규칙을 다시 사용하며, 복원 기준 테스트도 전역 덮어쓰기 부재와 기존 컴포넌트 위계를 확인하도록 바꿨다.
 - Eval evidence: `node --check public/app.js`, `npm test` 36건 통과, `npm run build:public-demo` 통과. 브라우저 시각 검수와 소유 Vercel 프로젝트 재배포는 로컬 Vercel CLI 로그인 부재로 unverified다.
+
+---
+
+## 사이드바 우측 돌출 제거 — 2026-09-07
+
+- Task contract: 데스크톱 사이드바가 본문 쪽으로 돌출되는 장식 레이어를 제거하고, 하나의 독립된 둥근 탐색 표면으로 유지한다.
+- Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, KRDS Web Typography and Information Hierarchy, Eval. 외부 조사·서비스 연동·문체 작업은 제외했다.
+- Decision: `.sidebar:after` 장식 레이어를 데스크톱에서도 표시하지 않도록 명시했다. 알림 패널의 고정 위치는 유지해 사이드바 바깥으로 필요한 알림만 정상 표출한다.
+- Acceptance evidence: 901px 이상에서 사이드바의 우측 의사요소가 `display:none`이며, 실제 본문 영역을 덮는 청록 장식이 없다. 이후 자동·브라우저 검증을 수행한다.
