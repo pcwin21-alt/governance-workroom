@@ -690,3 +690,12 @@
 - Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, KRDS Web Typography and Information Hierarchy, Eval. 외부 조사·서비스 연동·문체 작업은 제외했다.
 - Decision: `.sidebar:after` 장식 레이어를 데스크톱에서도 표시하지 않도록 명시했다. 알림 패널의 고정 위치는 유지해 사이드바 바깥으로 필요한 알림만 정상 표출한다.
 - Acceptance evidence: 901px 이상에서 사이드바의 우측 의사요소가 `display:none`이며, 실제 본문 영역을 덮는 청록 장식이 없다. 이후 자동·브라우저 검증을 수행한다.
+
+---
+
+## 일정 선택형 캘린더 레이아웃 — 2026-09-07
+
+- Task contract: 기본 회의 화면은 캘린더가 전체 폭을 사용하고, 일정 클릭 시에만 우측 요약 패널을 표시한다. 패널은 자연스럽게 진입하며, 일정 선택을 해제하면 캘린더 폭을 복원한다.
+- Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, KRDS Web Typography and Information Hierarchy, Eval. 외부 조사·서비스 연동·문체 작업은 제외했다.
+- Decision: 기본 선택값을 제거하고, 선택된 일정이 있을 때만 `.meeting-inspector`를 렌더한다. 날짜 클릭 또는 닫기 버튼은 선택을 해제한다. 데스크톱에서는 캘린더 압축과 우측 패널 진입 애니메이션을 적용하고, 1000px 이하에서는 세로 배치를 유지한다.
+- Acceptance evidence: 자동 검사와 공개 체험판 브라우저에서 기본 1열 캘린더, 일정 클릭 뒤 2열 요약, 닫기 뒤 1열 복원을 확인한다.
