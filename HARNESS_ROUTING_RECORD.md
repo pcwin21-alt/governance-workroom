@@ -735,3 +735,11 @@
 - Task contract: 좌측 대메뉴와 계정 아이콘을 이용자에게 익숙한 용어로 바꾸되, 탭 식별자와 기능 경로는 유지한다.
 - Decision: `오늘→홈`, `나의 활동→내 활동`, `회의·결정→회의`, `정책제안→정책 제안`, `기록→자료실`, `계정 관리→내 계정`으로 정리했다. 자료실 하위 메뉴도 `전체 기록 / 파일 관리 / 역대 기록`으로 맞췄다.
 - Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`를 통과했다.
+
+---
+
+## 공동 기록 범위 정리 — 2026-09-08
+
+- Task contract: `내 활동`이 개인 작업의 단일 진입점이 되도록 회의·정책 제안·자료실의 `전체 / 내 관련` 범위 전환을 제거하고, 각 화면은 참여기구의 공동 기록을 기본으로 표시한다.
+- Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 외부 조사·서비스 연동·문체 작업은 제외했다.
+- Decision: 회의 캘린더·회의 기록, 정책 제안 현황·목록, 자료실 기록 목록의 개인 범위 필터와 상태를 제거했다. 기존 상태·구분 필터와 열람 권한 표시는 유지한다.
