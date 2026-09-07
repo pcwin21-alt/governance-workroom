@@ -705,7 +705,7 @@
 ## 메뉴별 중복 요소 정리 — 2026-09-07
 
 - Task contract: 좌측 메뉴와 같은 기능·문구를 반복하는 소제목, 같은 데이터를 중복 표출하는 레이아웃을 제거하되, 각 작업 경로와 모바일 접근성은 유지한다.
-- Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`를 통과했고 공개 체험판에서 좌측 대메뉴만으로 회의·결정과 기록의 핵심 화면·필터·목록이 렌더되는 것을 확인했다.
+- Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`를 통과했고 공개 체험판에서 좌측 대메뉴만으로 회의·결정과 기록의 핵심 화면·필터·목록이 렌더되는 것을 확인했다. 홈의 중복 일정 캘린더는 회의·결정 메뉴의 단일 캘린더로 통합했다.
 - Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, KRDS Web Typography and Information Hierarchy, Eval. 외부 조사·서비스 연동·문체 작업은 제외했다.
 - Decision: 공통 상단 안내문을 제거하고, 회의 화면의 캘린더 아래 중복 일정 목록을 제거했다. 아카이브는 소메뉴와 같은 제목·구분 요약 카드를 없애고 단일 구분 필터와 기록 목록만 남겼다. 역대 기록도 소메뉴와 중복된 제목을 제거했다.
 - Eval evidence: `node --check public/app.js`, `npm test`, 공개 체험판 주요 메뉴 렌더를 확인한다.
