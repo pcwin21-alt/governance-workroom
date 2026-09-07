@@ -761,3 +761,4 @@
 - Task contract: 공개 체험판의 `대시보드 열기`는 기관 담당자·검토 수신함이 아니라 위원회 운영 홈으로 진입하고, 기관 담당자 화면은 UI 라우팅에서 표출하지 않는다.
 - Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 외부 서비스 연동·서버 데이터 삭제·문체 작업은 제외했다.
 - Decision: 공개 체험 초기 탭과 진입 함수 모두 `홈`으로 고정했다. 기관 수신함과 기존 기관용 홈은 UI 화면 목록에서 제외했으며, 정책 전달·회신의 서버 데이터와 API는 후속 재개를 위해 삭제하지 않았다.
+- Eval evidence: `node --check public/app.js`, `npm test`(36 passed), `npm run build:public-demo`를 통과했다. 공개 체험판의 `?demo=dashboard` 첫 화면에서 `오늘 처리할 일`, 위원회 일정, 진행 중 정책제안이 표시되고 기관 수신함 화면이 나타나지 않는 것을 확인했다.
