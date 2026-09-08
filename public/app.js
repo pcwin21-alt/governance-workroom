@@ -86,6 +86,7 @@ const tabLabels = Object.freeze({ home: '홈', my_activity: '내 활동', meetin
 const primarySubmenus = Object.freeze({
   meetings: { current: () => state.meetingSection, attribute: 'meeting-section', items: [['calendar', '일정·참석'], ['records', '회의 기록']] },
   proposals: { current: () => state.proposalSection, attribute: 'proposal-section', items: [['overview', '제안 현황'], ['documents', '제안서 목록'], ['create', '정책 제안서 작성']] },
+  archive: { current: () => state.archiveSection, attribute: 'archive-section', items: [['dashboard', '전체 기록'], ['manage', '파일 관리'], ['history', '역대 기록']] }
 });
 function navItem(id, label = tabLabels[id]) { const submenu = primarySubmenus[id]; const isActive = state.tab === id; const links = submenu && isActive ? `<div class="sidebar-subnav" aria-label="${esc(label)} 소메뉴">${submenu.items.map(([section, itemLabel]) => `<button class="${submenu.current() === section ? 'active' : ''}" data-tab="${id}" data-${submenu.attribute}="${section}">${esc(itemLabel)}</button>`).join('')}</div>` : ''; return `<div class="sidebar-nav-group"><button class="nav-item ${isActive ? 'active' : ''}" data-tab="${id}"><span class="nav-icon" aria-hidden="true">${navIcons[id] || '•'}</span><span>${label}</span></button>${links}</div>`; }
 function sectionNav(items, current, attribute) { if (['home-section', 'meeting-section', 'proposal-section', 'archive-section'].includes(attribute)) return ''; return `<nav class="section-nav" aria-label="페이지 소메뉴">${items.map(([id, label]) => `<button class="${current === id ? 'active' : ''}" data-${attribute}="${id}">${esc(label)}</button>`).join('')}</nav>`; }
@@ -557,7 +558,9 @@ function archiveHistoryWorkspace() {
 }
 
 function archive() {
-  return `${documentPackageWorkspace()}${archiveDriveWorkspace()}`;
+  const navigation = sectionNav([['dashboard', '기록 모아보기'], ['manage', '기록 정리'], ['history', '역대 위원회']], state.archiveSection, 'archive-section');
+  if (state.archiveSection === 'manage') return `${navigation}${documentPackageWorkspace()}${archiveDriveWorkspace()}`;
+  return `${navigation}${state.archiveSection === 'history' ? archiveHistoryWorkspace() : archiveDashboardWorkspace()}`;
 }
 function operations() {
   if (state.data.me.role !== 'platform_admin' || !state.data.platform) return `<section class="panel"><h2>접근 권한이 없습니다.</h2><p>운영사 관리 콘솔은 지정된 운영사 관리자만 이용할 수 있습니다.</p></section>`;
