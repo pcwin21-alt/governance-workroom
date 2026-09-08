@@ -263,7 +263,30 @@ function recordExportControls(sourceType, sourceId) {
   const file = recordFileFor(sourceType, sourceId);
   if (!file) return '';
   const label = `${file.title} 내보내기`;
-  return `<div class="record-export-actions" aria-label="${esc(label)}"><button class="secondary record-file-docx" data-record-file="${file.id}">DOCX</button><button class="secondary record-file-print" data-record-file="${file.id}">PDF로 저장</button></div>`;
+  return `<div class="record-export-actions" aria-label="${esc(label)}"><button class="secondary record-file-docx" data-record-file="${file.id}">${isPublicDemo ? 'Word 다운로드' : 'DOCX'}</button><button class="secondary record-file-print" data-record-file="${file.id}">PDF로 저장</button></div>`;
+}
+
+function printableRecordHtml(file) {
+  const version = file?.versions?.[0];
+  const body = esc(version?.body || '기록 내용이 없습니다.').replace(/\n/g, '<br>');
+  return `<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>${esc(file?.title || '기록 파일')}</title><style>body{max-width:760px;margin:48px auto;padding:0 28px;color:#1d3029;font:16px/1.7 Arial,sans-serif}h1{font-size:28px;line-height:1.3}small{color:#61736d}.body{margin-top:28px;padding-top:22px;border-top:1px solid #cedbd5}@media print{body{margin:0;max-width:none}}</style></head><body><small>${esc(file?.category || '기록 파일')} · v${version?.version || file?.currentVersion || 1}</small><h1>${esc(file?.title || '기록 파일')}</h1><div class="body">${body}</div></body></html>`;
+}
+
+function exportRecordFile(fileId, format) {
+  const file = (state.data?.recordFiles || []).find((item) => item.id === fileId);
+  if (!file) return;
+  if (isPublicDemo && state.token === '__public_demo__') {
+    const html = printableRecordHtml(file);
+    if (format === 'docx') {
+      const blob = new Blob([html], { type: 'application/msword;charset=utf-8' });
+      const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = `${file.title.replace(/[^0-9A-Za-z가-힣_-]+/g, '_') || 'governance-record'}.doc`; link.click(); window.setTimeout(() => URL.revokeObjectURL(url), 0);
+      return;
+    }
+    const output = window.open('', '_blank');
+    if (output) { output.document.write(html); output.document.close(); output.focus(); }
+    return;
+  }
+  window.open(`/api/record-files/${encodeURIComponent(fileId)}/${format === 'docx' ? 'docx' : 'print'}`, '_blank', 'noopener');
 }
 
 function workspaceActionMenu() {
@@ -1002,8 +1025,8 @@ modal('참여기구 기본 정보', `<label>기구명<input name="displayName" v
   document.querySelector('#cancel-organization-editor')?.addEventListener('click', closeOrganizationEditor);
   document.querySelector('#cancel-organization-editor-bottom')?.addEventListener('click', closeOrganizationEditor);
   document.querySelector('#organization-data-form')?.addEventListener('submit', async (event) => { event.preventDefault(); try { await api('/api/organization-profile', { method: 'PATCH', body: JSON.stringify(Object.fromEntries(new FormData(event.currentTarget))) }); state.organizationEditorOpen = false; await refresh('참여기구 기본 정보를 저장했습니다.'); } catch (error) { state.error = error.message; render(); } });
-  document.querySelectorAll('.record-file-docx').forEach((button) => button.addEventListener('click', () => window.open(`/api/record-files/${encodeURIComponent(button.dataset.recordFile)}/docx`, '_blank', 'noopener')));
-  document.querySelectorAll('.record-file-print').forEach((button) => button.addEventListener('click', () => window.open(`/api/record-files/${encodeURIComponent(button.dataset.recordFile)}/print`, '_blank', 'noopener')));
+  document.querySelectorAll('.record-file-docx').forEach((button) => button.addEventListener('click', () => exportRecordFile(button.dataset.recordFile, 'docx')));
+  document.querySelectorAll('.record-file-print').forEach((button) => button.addEventListener('click', () => exportRecordFile(button.dataset.recordFile, 'print')));
   document.querySelectorAll('.record-file-open').forEach((button) => button.addEventListener('click', () => { const item = state.data.recordFiles.find((entry) => entry.id === button.dataset.recordFile); const version = item?.versions?.[0]; if (!item || !version) return; modal(item.title, `<div class="record-file-detail"><span class="tag">${esc(item.category)} · v${version.version}</span><p class="archive-detail-body">${esc(version.body)}</p><small>원본 기록 변경 시 새 버전이 자동으로 남습니다. 현재 파일은 ${fmt(version.createdAt)} 기준입니다.</small><div class="record-file-export"><button class="secondary record-file-docx" data-record-file="${item.id}">DOCX</button><button class="secondary record-file-print" data-record-file="${item.id}">PDF로 저장</button></div><section><h3>버전 이력</h3>${item.versions.map((entry) => `<p><b>v${entry.version}</b> · ${esc(entry.reason || '기록 갱신')}<small>${fmt(entry.createdAt)}</small></p>`).join('')}</section></div>`); document.querySelectorAll('.record-file-docx').forEach((exportButton) => exportButton.addEventListener('click', () => window.open(`/api/record-files/${encodeURIComponent(exportButton.dataset.recordFile)}/docx`, '_blank', 'noopener'))); document.querySelectorAll('.record-file-print').forEach((exportButton) => exportButton.addEventListener('click', () => window.open(`/api/record-files/${encodeURIComponent(exportButton.dataset.recordFile)}/print`, '_blank', 'noopener'))); }));
   document.querySelectorAll('.archive-open').forEach((button) => button.addEventListener('click', () => { const item = state.data.archiveItems.find((entry) => entry.id === button.dataset.archiveItem); if (!item) return; const notes = item.notes || []; const history = item.history || []; const panel = modal(item.title, `<div class="archive-detail"><span class="tag">${esc(item.category)}</span><p class="archive-detail-body">${esc(item.body || '')}</p>${item.sourceUrl ? `<a href="${esc(item.sourceUrl)}" target="_blank" rel="noreferrer">연결 자료 열기</a>` : ''}${item.source ? `<small>원본: ${esc(item.source.label)} · 보관 시점 ${fmt(item.source.recordedAt)}</small>` : ''}<section><h3>운영 메모</h3>${notes.map((note) => `<article><b>${esc(user(note.createdBy).name)}</b><p>${esc(note.body)}</p><small>${esc(note.cohort || '기수 미정')} · ${fmt(note.createdAt)}</small></article>`).join('') || '<p class="muted">추가 메모가 없습니다.</p>'}${roleCanManage() ? '<button class="secondary" id="add-archive-note">메모 추가</button>' : ''}</section><section><h3>파일 이력</h3>${history.map((entry) => `<p><b>${esc(entry.cohort || '기수 미정')}</b> · ${esc(entry.detail || entry.type)}<small>${fmt(entry.at)} · ${esc(user(entry.actorId).name)}</small></p>`).join('') || '<p class="muted">이력이 없습니다.</p>'}</section></div>`); panel.querySelector('#add-archive-note')?.addEventListener('click', () => { panel.closeModal(); modal('운영 메모 추가', `<label>메모<textarea name="body" placeholder="다음 사람이 알아야 할 맥락이나 변경 이유를 적어 주세요." required></textarea></label><small>작성 시점의 기수와 작성자가 자동으로 기록됩니다.</small>`, async (body) => { await api(`/api/archive-items/${item.id}/notes`, { method: 'POST', body: JSON.stringify(body) }); await refresh('보관 파일에 메모를 추가했습니다.'); }); }); }));
   document.querySelector('#community-form')?.addEventListener('submit', async (event) => { event.preventDefault(); try { await api('/api/community-posts', { method: 'POST', body: JSON.stringify(Object.fromEntries(new FormData(event.currentTarget))) }); await refresh('내부 게시물로 등록했습니다.'); } catch (error) { state.error = error.message; render(); } });
