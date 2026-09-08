@@ -257,9 +257,9 @@ function proposalStatusClass(status) {
 function workspaceActionMenu() {
   const manager = roleCanManage();
   const items = [
-    '<button type="button" data-workspace-action="proposal">정책 제안서 작성</button>',
-    manager ? '<button type="button" data-workspace-action="meeting">회의 추가</button>' : '',
-    manager ? '<button type="button" data-workspace-action="manage">구성원·권한 관리</button>' : '<button type="button" data-workspace-action="account">내 계정 관리</button>'
+    '<button type="button" data-workspace-action="proposal" aria-label="정책 제안서 작성">정책 제안서 작성</button>',
+    manager ? '<button type="button" data-workspace-action="meeting" aria-label="회의 추가">회의 추가</button>' : '',
+    manager ? '<button type="button" data-workspace-action="manage" aria-label="구성원·권한 관리">구성원·권한 관리</button>' : '<button type="button" data-workspace-action="account" aria-label="내 계정 관리">내 계정 관리</button>'
   ].filter(Boolean).join('');
   return `<div class="workspace-global-bar"><details class="workspace-actions-menu"><summary>추가·관리</summary><div>${items}</div></details></div>`;
 }
