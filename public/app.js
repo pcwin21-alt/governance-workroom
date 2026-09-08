@@ -255,6 +255,17 @@ function proposalStatusClass(status) {
   return ({ draft: 'draft', internal_review: 'review', consulting: 'consulting', approved: 'approved', submitted: 'submitted', closed: 'closed' })[status] || 'draft';
 }
 
+function recordFileFor(sourceType, sourceId) {
+  return (state.data?.recordFiles || []).find((file) => file.source?.type === sourceType && file.source?.id === sourceId);
+}
+
+function recordExportControls(sourceType, sourceId) {
+  const file = recordFileFor(sourceType, sourceId);
+  if (!file) return '';
+  const label = `${file.title} 내보내기`;
+  return `<div class="record-export-actions" aria-label="${esc(label)}"><button class="secondary record-file-docx" data-record-file="${file.id}">DOCX</button><button class="secondary record-file-print" data-record-file="${file.id}">PDF로 저장</button></div>`;
+}
+
 function workspaceActionMenu() {
   const manager = roleCanManage();
   const items = [
@@ -704,8 +715,31 @@ function normalizeVisibleLanguage(root = app) {
   for (let node = walker.nextNode(); node; node = walker.nextNode()) node.nodeValue = replace(node.nodeValue || '');
   root.querySelectorAll('[aria-label], [title], [placeholder]').forEach((element) => ['aria-label', 'title', 'placeholder'].forEach((name) => { const value = element.getAttribute(name); if (value) element.setAttribute(name, replace(value)); }));
 }
+function injectDashboardRecordExports() {
+  if (!state.data?.recordFiles) return;
+  const selectedProposal = state.data.proposals.find((item) => item.id === state.selectedProposalId);
+  const proposalHead = app.querySelector('.proposal-detail > .panel-head');
+  if (selectedProposal && proposalHead && !proposalHead.querySelector('.record-export-actions')) {
+    proposalHead.insertAdjacentHTML('beforeend', recordExportControls('proposal', selectedProposal.id));
+  }
+  if (state.tab === 'meetings' && state.meetingSection === 'records') {
+    const meetings = [...state.data.meetings].sort((left, right) => String(right.startsAt).localeCompare(String(left.startsAt)));
+    app.querySelectorAll('.meeting-record-card').forEach((card, index) => {
+      const meeting = meetings[index];
+      const openButton = card.querySelector('header > [data-calendar-meeting]');
+      if (meeting && openButton && !card.querySelector('.record-export-actions')) {
+        openButton.insertAdjacentHTML('beforebegin', recordExportControls('meeting', meeting.id));
+      }
+    });
+  }
+  const selectedMeeting = state.data.meetings.find((item) => item.id === state.selectedMeetingId);
+  const meetingActions = app.querySelector('.meeting-quick-actions');
+  if (selectedMeeting && meetingActions && !meetingActions.querySelector('.record-export-actions')) {
+    meetingActions.insertAdjacentHTML('beforeend', recordExportControls('meeting', selectedMeeting.id));
+  }
+}
 function injectChairManagementShortcut() { if (state.tab !== 'settings' || state.data?.me.role !== 'chair') return; const profile = app.querySelector('.personal-profile-overview'); profile?.insertAdjacentHTML('afterend', '<section class="panel account-chair-management"><div><h3>위원장 관리</h3><p>구성원·권한, 초대, 분과 배치와 운영 현황을 관리합니다.</p></div><button class="secondary" data-tab="members">위원장 관리 열기</button></section>'); }
-function render() { if (!state.token || !state.data) return publicPage() === 'login' ? loginView() : publicPage() === 'join' ? invitationJoinView() : publicView(); app.innerHTML = shell(view()); normalizeVisibleLanguage(); refineSidebarBrand(); renderInlineEditor(); refineMeetingInspector(); injectChairManagementShortcut(); normalizeVisibleLanguage(); app.querySelectorAll('.main > .toolbar > p, .main .proposal-overview-head > .proposal-overview-actions, .main .archive-toolbar > div:first-child, .main > .member-workspace > .member-workspace-head > div:not(.member-management-actions), .main > .member-management > .member-workspace-head > div:not(.member-management-actions), .main .member-organization-space .org-diagram-wrap > .panel-head, .main .member-organization-space .org-member-list > .panel-head, .main .member-management .member-overview-panel > .panel-head, .main .member-management .invitation-panel > .panel-head, .main .handover-guide').forEach((element) => element.remove()); app.querySelectorAll('.main > .toolbar').forEach((toolbar) => { if (!toolbar.textContent.trim() && !toolbar.querySelector('button, input, select, textarea, details')) toolbar.remove(); }); bind(); showDeadlineReminder(); }
+function render() { if (!state.token || !state.data) return publicPage() === 'login' ? loginView() : publicPage() === 'join' ? invitationJoinView() : publicView(); app.innerHTML = shell(view()); normalizeVisibleLanguage(); refineSidebarBrand(); renderInlineEditor(); refineMeetingInspector(); injectDashboardRecordExports(); injectChairManagementShortcut(); normalizeVisibleLanguage(); app.querySelectorAll('.main > .toolbar > p, .main .proposal-overview-head > .proposal-overview-actions, .main .archive-toolbar > div:first-child, .main > .member-workspace > .member-workspace-head > div:not(.member-management-actions), .main > .member-management > .member-workspace-head > div:not(.member-management-actions), .main .member-organization-space .org-diagram-wrap > .panel-head, .main .member-organization-space .org-member-list > .panel-head, .main .member-management .member-overview-panel > .panel-head, .main .member-management .invitation-panel > .panel-head, .main .handover-guide').forEach((element) => element.remove()); app.querySelectorAll('.main > .toolbar').forEach((toolbar) => { if (!toolbar.textContent.trim() && !toolbar.querySelector('button, input, select, textarea, details')) toolbar.remove(); }); bind(); showDeadlineReminder(); }
 
 function modal(title, body, onSubmit = null, submitLabel = '저장') { const element = document.createElement('div'); element.className = 'modal-backdrop'; element.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}"><button class="modal-close" aria-label="닫기">×</button><h2>${title}</h2><form id="modal-form" class="form-stack">${body}${onSubmit ? `<button class="primary">${esc(submitLabel)}</button>` : ''}</form></div>`; document.body.append(element); const close = () => { if (element.dataset.closing) return; element.dataset.closing = 'true'; element.classList.add('is-leaving'); window.setTimeout(() => element.remove(), 160); }; element.closeModal = close; element.querySelector('.modal-close').onclick = close; element.onclick = (event) => { if (event.target === element) close(); }; if (onSubmit) element.querySelector('#modal-form').onsubmit = async (event) => { event.preventDefault(); try { await onSubmit(Object.fromEntries(new FormData(event.currentTarget)), event.currentTarget); close(); } catch (error) { state.error = error.message; close(); render(); } }; return element; }
 
@@ -968,6 +1002,8 @@ modal('참여기구 기본 정보', `<label>기구명<input name="displayName" v
   document.querySelector('#cancel-organization-editor')?.addEventListener('click', closeOrganizationEditor);
   document.querySelector('#cancel-organization-editor-bottom')?.addEventListener('click', closeOrganizationEditor);
   document.querySelector('#organization-data-form')?.addEventListener('submit', async (event) => { event.preventDefault(); try { await api('/api/organization-profile', { method: 'PATCH', body: JSON.stringify(Object.fromEntries(new FormData(event.currentTarget))) }); state.organizationEditorOpen = false; await refresh('참여기구 기본 정보를 저장했습니다.'); } catch (error) { state.error = error.message; render(); } });
+  document.querySelectorAll('.record-file-docx').forEach((button) => button.addEventListener('click', () => window.open(`/api/record-files/${encodeURIComponent(button.dataset.recordFile)}/docx`, '_blank', 'noopener')));
+  document.querySelectorAll('.record-file-print').forEach((button) => button.addEventListener('click', () => window.open(`/api/record-files/${encodeURIComponent(button.dataset.recordFile)}/print`, '_blank', 'noopener')));
   document.querySelectorAll('.record-file-open').forEach((button) => button.addEventListener('click', () => { const item = state.data.recordFiles.find((entry) => entry.id === button.dataset.recordFile); const version = item?.versions?.[0]; if (!item || !version) return; modal(item.title, `<div class="record-file-detail"><span class="tag">${esc(item.category)} · v${version.version}</span><p class="archive-detail-body">${esc(version.body)}</p><small>원본 기록 변경 시 새 버전이 자동으로 남습니다. 현재 파일은 ${fmt(version.createdAt)} 기준입니다.</small><div class="record-file-export"><button class="secondary record-file-docx" data-record-file="${item.id}">DOCX</button><button class="secondary record-file-print" data-record-file="${item.id}">PDF로 저장</button></div><section><h3>버전 이력</h3>${item.versions.map((entry) => `<p><b>v${entry.version}</b> · ${esc(entry.reason || '기록 갱신')}<small>${fmt(entry.createdAt)}</small></p>`).join('')}</section></div>`); document.querySelectorAll('.record-file-docx').forEach((exportButton) => exportButton.addEventListener('click', () => window.open(`/api/record-files/${encodeURIComponent(exportButton.dataset.recordFile)}/docx`, '_blank', 'noopener'))); document.querySelectorAll('.record-file-print').forEach((exportButton) => exportButton.addEventListener('click', () => window.open(`/api/record-files/${encodeURIComponent(exportButton.dataset.recordFile)}/print`, '_blank', 'noopener'))); }));
   document.querySelectorAll('.archive-open').forEach((button) => button.addEventListener('click', () => { const item = state.data.archiveItems.find((entry) => entry.id === button.dataset.archiveItem); if (!item) return; const notes = item.notes || []; const history = item.history || []; const panel = modal(item.title, `<div class="archive-detail"><span class="tag">${esc(item.category)}</span><p class="archive-detail-body">${esc(item.body || '')}</p>${item.sourceUrl ? `<a href="${esc(item.sourceUrl)}" target="_blank" rel="noreferrer">연결 자료 열기</a>` : ''}${item.source ? `<small>원본: ${esc(item.source.label)} · 보관 시점 ${fmt(item.source.recordedAt)}</small>` : ''}<section><h3>운영 메모</h3>${notes.map((note) => `<article><b>${esc(user(note.createdBy).name)}</b><p>${esc(note.body)}</p><small>${esc(note.cohort || '기수 미정')} · ${fmt(note.createdAt)}</small></article>`).join('') || '<p class="muted">추가 메모가 없습니다.</p>'}${roleCanManage() ? '<button class="secondary" id="add-archive-note">메모 추가</button>' : ''}</section><section><h3>파일 이력</h3>${history.map((entry) => `<p><b>${esc(entry.cohort || '기수 미정')}</b> · ${esc(entry.detail || entry.type)}<small>${fmt(entry.at)} · ${esc(user(entry.actorId).name)}</small></p>`).join('') || '<p class="muted">이력이 없습니다.</p>'}</section></div>`); panel.querySelector('#add-archive-note')?.addEventListener('click', () => { panel.closeModal(); modal('운영 메모 추가', `<label>메모<textarea name="body" placeholder="다음 사람이 알아야 할 맥락이나 변경 이유를 적어 주세요." required></textarea></label><small>작성 시점의 기수와 작성자가 자동으로 기록됩니다.</small>`, async (body) => { await api(`/api/archive-items/${item.id}/notes`, { method: 'POST', body: JSON.stringify(body) }); await refresh('보관 파일에 메모를 추가했습니다.'); }); }); }));
   document.querySelector('#community-form')?.addEventListener('submit', async (event) => { event.preventDefault(); try { await api('/api/community-posts', { method: 'POST', body: JSON.stringify(Object.fromEntries(new FormData(event.currentTarget))) }); await refresh('내부 게시물로 등록했습니다.'); } catch (error) { state.error = error.message; render(); } });

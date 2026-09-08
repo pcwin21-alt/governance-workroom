@@ -856,3 +856,12 @@
 - Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 역할·테넌트 권한 정책과 서버 API는 변경하지 않는다.
 - Decision: 공통 `추가·관리` 메뉴는 폐지한다. 정책 제안 작성은 기존 소메뉴를 사용하고, 회의 생성·출결 통계는 회의 화면에서만 표시한다. 좌측에는 위원장에게만 `위원장 관리` 메뉴를 보이며, `내 계정`에는 같은 관리 공간으로 향하는 바로가기를 추가한다.
 - Eval plan: 위원장 화면의 좌측 메뉴·내 계정 바로가기·회의 맥락 행동과 일반위원 화면의 비노출을 확인한다.
+
+---
+
+## 기록 화면 직접 내보내기 — 2026-09-08
+
+- Task contract: 정책제안서와 회의 기록 대시보드에서 현재 기록 파일을 바로 내보낸다.
+- Active: Root AGENTS, Harness & Skill Inventory Router, `codex-delivery-loop`, Eval. 기록 파일의 자동 버전 정책·테넌트 접근 정책은 유지한다.
+- Decision: 정책제안서 상세, 회의 기록 카드, 선택한 회의의 일정 요약에 현재 버전 `DOCX`와 `PDF로 저장`을 표시한다. 원본 회의·제안은 그대로 두며, PDF는 출력 화면을 연 뒤 브라우저 인쇄에서 저장하는 흐름으로 명시한다.
+- Eval plan: 세 진입점의 버튼 표출, DOCX·출력 URL의 기록 파일 식별자, 작은 화면에서 버튼 줄바꿈을 확인한다.
